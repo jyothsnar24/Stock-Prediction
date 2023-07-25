@@ -2,6 +2,10 @@ import streamlit as st
 import pandas as pd
 
 import yfinance as yf 
+import numpy as np
+from pandas_datareader import data as pdr
+from datetime import datetime
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 pd.options.mode.chained_assignment = None  # Disable SettingWithCopyWarning
 
@@ -39,11 +43,7 @@ def get_stock_data(stock_name, num_data_points=5):
 
 def predict_stock_price(symbol):
    
-    import numpy as np
-  
-    from pandas_datareader import data as pdr
-    from datetime import datetime
-    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    
 
     # Set the end and start times for data retrieval
     end = datetime.now()
