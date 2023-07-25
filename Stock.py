@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import yfinance as yf
-
+ 
 def get_stock_data(stock_name, num_data_points=5):
     """
     Fetch historical stock data from Yahoo Finance.
