@@ -6,7 +6,7 @@ import numpy as np
 from pandas_datareader import data as pdr
 from datetime import datetime
 from statsmodels.tsa.statespace.sarimax import SARIMAX
-from pandas import to_datetime, Int64Index, DatetimeIndex, Period
+
 
 
 pd.options.mode.chained_assignment = None  # Disable SettingWithCopyWarning
