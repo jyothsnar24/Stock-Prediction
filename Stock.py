@@ -26,6 +26,9 @@ def get_stock_data(stock_name, num_data_points=5):
         stock_data = stock_data[['Open', 'High', 'Low', 'Close', 'Volume']]
         stock_data.reset_index(inplace=True)
 
+        # Convert the date column to datetime type
+        stock_data['Date'] = pd.to_datetime(stock_data['Date'])
+
         return stock_data
 
     except Exception as e:
