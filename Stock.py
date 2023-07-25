@@ -1,16 +1,7 @@
 import streamlit as st
 import pandas as pd
-
-import yfinance as yf 
 import numpy as np
-from pandas_datareader import data as pdr
-from datetime import datetime
-from statsmodels.tsa.statespace.sarimax import SARIMAX
-
-
-
-pd.options.mode.chained_assignment = None  # Disable SettingWithCopyWarning
-
+import yfinance as yf
 
 def get_stock_data(stock_name, num_data_points=5):
     """
@@ -32,9 +23,6 @@ def get_stock_data(stock_name, num_data_points=5):
         stock_data = stock_data[['Open', 'High', 'Low', 'Close', 'Volume']]
         stock_data.reset_index(inplace=True)
 
-        # Convert the date column to datetime type
-        stock_data['Date'] = pd.to_datetime(stock_data['Date'])
-
         return stock_data
 
     except Exception as e:
@@ -44,8 +32,10 @@ def get_stock_data(stock_name, num_data_points=5):
 
 
 def predict_stock_price(symbol):
-   
-    
+    import pandas as pd
+    from pandas_datareader import data as pdr
+    from datetime import datetime
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
 
     # Set the end and start times for data retrieval
     end = datetime.now()
