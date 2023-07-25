@@ -3,6 +3,8 @@ import pandas as pd
 
 import yfinance as yf
 import pandas as pd
+pd.options.mode.chained_assignment = None  # Disable SettingWithCopyWarning
+
 
 def get_stock_data(stock_name, num_data_points=5):
     """
