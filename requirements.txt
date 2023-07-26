@@ -7,4 +7,4 @@ patsy==0.5.1
 scipy==1.7.3
 statsmodels==0.12.2
 pytest
-pandas.testing==4.17.1
+pytest-pandas
