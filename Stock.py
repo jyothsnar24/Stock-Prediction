@@ -41,6 +41,7 @@ def predict_stock_price(symbol):
     Returns:
         pd.DataFrame: A DataFrame containing the predicted stock prices.
     """
+
     # Set the end and start times for data retrieval
     end = datetime.now()
     start = datetime(end.year - 1, end.month, end.day)
