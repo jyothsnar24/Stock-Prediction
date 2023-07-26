@@ -59,7 +59,7 @@ def predict_stock_price(symbol,tz=None):
     start = end - timedelta(days=365)
 
     # Retrieve stock data for the specified symbol
-    df = yf.download(symbol, start=start, end=end)
+    df = yf.download(symbol, start=start, end=end, group_by='ticker')
 
     # Create a new dataframe with only the 'Close' column
     data = df.filter(['Close'])
