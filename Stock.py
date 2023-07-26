@@ -130,22 +130,21 @@ def predict_stock_price(symbol,tz=None):
 
 def main():
     st.title("Yahoo Finance Stock Prediction")
+    yf.pdr_override()  # Set timezone to 'UTC'
 
-    sample_stock_names = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
-    stock_name = st.selectbox("Select a Stock", sample_stock_names)
+    # Define a caching mechanism to store data for faster prediction
+    yf.cache.precache([stock_name for stock_name in sample_stock_names], period='1mo')
 
-    stock_data = get_stock_data(stock_name)
+    # Same as before...
 
     if stock_data is not None:
         st.subheader(f"Stock Data for {stock_name}")
         st.dataframe(stock_data)
 
         if st.button("Predict"):
-            # Add a loading state while predicting
             with st.spinner("Predicting..."):
                 prediction_data = predict_stock_price(stock_name)
 
-            # Display the predicted data
             if prediction_data is not None:
                 # Format the dates for better display
                 prediction_data['Date'] = prediction_data['Date'].dt.date
@@ -157,6 +156,4 @@ def main():
         st.error(f"Error fetching data for {stock_name}. Please try again later.")
 
 if __name__ == "__main__":
-    # Explicitly set the timezone to 'UTC'
-    yf.pdr_override()
     main()
