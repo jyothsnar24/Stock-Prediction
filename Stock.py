@@ -157,4 +157,6 @@ def main():
         st.error(f"Error fetching data for {stock_name}. Please try again later.")
 
 if __name__ == "__main__":
+    # Explicitly set the timezone to 'UTC'
+    yf.pdr_override()
     main()
