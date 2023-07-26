@@ -131,7 +131,8 @@ def predict_stock_price(symbol,tz=None):
 def main():
     st.title("Yahoo Finance Stock Prediction")
 
-    sample_stock_names = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
+    sample_stock_names = ["AAPL", "AMZN", "GOOGL", "MSFT", "FB", "TSLA", "BRK.A", "JPM", "BAC", "C", "XOM", "CVX", "GE", "NFLX", "DIS", "NVDA", "PYPL", "V", "MA", "JNJ", "PFE", "WMT", "KO", "NKE", "ADBE", "CRM", "MCD", "PG", "VZ", "IBM"]
+
     stock_name = st.selectbox("Select a Stock", sample_stock_names)
 
     stock_data = get_stock_data(stock_name)
