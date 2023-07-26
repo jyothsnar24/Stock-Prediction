@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import yfinance as yf
+import datetime
 
 def get_stock_data(stock_name, num_data_points=5):
     """
@@ -32,7 +33,7 @@ def get_stock_data(stock_name, num_data_points=5):
 
 
 def predict_stock_price(symbol):
-    import datetime
+    
     """
     Predict the stock price for the next 7 days using the SARIMAX model.
 
