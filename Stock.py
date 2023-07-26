@@ -48,6 +48,11 @@ def predict_stock_price(symbol):
         pd.DataFrame: A DataFrame containing the predicted stock prices.
     """
 
+    predictions_sarimax = pd.DataFrame()  # Empty DataFrame to store predictions
+    predicted_dates_sarima = pd.Index([])  # Empty Index to store predicted dates
+    predicted_prices_sarima = np.array([])  # Empty array to store predicted prices
+
+
     # Set the end and start times for data retrieval
     now = datetime.date.today()
     end = now
