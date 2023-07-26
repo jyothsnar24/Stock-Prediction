@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import yfinance as yf
+import datetime
+from datetime import timedelta
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 
 def get_stock_data(stock_name, num_data_points=5):
@@ -32,9 +35,9 @@ def get_stock_data(stock_name, num_data_points=5):
 
 
 
+
+
 def predict_stock_price(symbol):
-    import datetime 
-    import dateutil
     """
     Predict the stock price for the next 7 days using the SARIMAX model.
 
@@ -46,13 +49,12 @@ def predict_stock_price(symbol):
     """
 
     # Set the end and start times for data retrieval
-    now = dateutil.date.today()
+    now = datetime.date.today()
     end = now
     start = end - timedelta(days=365)
 
-    # Retrieve stock data for AAPL
-    yf.pdr_override()
-    df = pdr.get_data_yahoo(symbol, start, end)
+    # Retrieve stock data for the specified symbol
+    df = yf.download(symbol, start=start, end=end)
 
     # Create a new dataframe with only the 'Close' column
     data = df.filter(['Close'])
@@ -84,6 +86,7 @@ def predict_stock_price(symbol):
 
     # Print the predicted dates and prices for the next 7 days
     return predictions_sarimax
+
 
 
 
