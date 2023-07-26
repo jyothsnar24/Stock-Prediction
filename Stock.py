@@ -95,29 +95,60 @@ def predict_stock_price(symbol,tz=None):
 
 
 
+# def main():
+#     st.title("Yahoo Finance Stock Prediction")
+    
+#     # Define a list of sample stock names
+#     sample_stock_names = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
+    
+#     # Create a dropdown to select the stock name
+#     stock_name = st.selectbox("Select a Stock", sample_stock_names)
+    
+#     # Get the historical stock data
+#     stock_data = get_stock_data(stock_name)
+    
+#     if stock_data is not None:
+#         st.subheader(f"Stock Data for {stock_name}")
+#         st.dataframe(stock_data)
+
+#         # Add a "Predict" button
+#         if st.button("Predict"):
+#             # Get predicted data using the predict_stock_price function
+#             prediction_data = predict_stock_price(stock_name)
+
+#             # Display the predicted data
+#             if prediction_data is not None:
+#                 st.subheader(f"Future Prediction Prices for {stock_name}")
+#                 st.dataframe(prediction_data)
+#             else:
+#                 st.warning("No prediction data available.")
+#     else:
+#         st.error(f"Error fetching data for {stock_name}. Please try again later.")
+
+# if __name__ == "__main__":
+#     main()
+
 def main():
     st.title("Yahoo Finance Stock Prediction")
-    
-    # Define a list of sample stock names
+
     sample_stock_names = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
-    
-    # Create a dropdown to select the stock name
     stock_name = st.selectbox("Select a Stock", sample_stock_names)
-    
-    # Get the historical stock data
+
     stock_data = get_stock_data(stock_name)
-    
+
     if stock_data is not None:
         st.subheader(f"Stock Data for {stock_name}")
         st.dataframe(stock_data)
 
-        # Add a "Predict" button
         if st.button("Predict"):
-            # Get predicted data using the predict_stock_price function
-            prediction_data = predict_stock_price(stock_name)
+            # Add a loading state while predicting
+            with st.spinner("Predicting..."):
+                prediction_data = predict_stock_price(stock_name)
 
             # Display the predicted data
             if prediction_data is not None:
+                # Format the dates for better display
+                prediction_data['Date'] = prediction_data['Date'].dt.date
                 st.subheader(f"Future Prediction Prices for {stock_name}")
                 st.dataframe(prediction_data)
             else:
