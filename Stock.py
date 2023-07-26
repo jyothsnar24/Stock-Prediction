@@ -37,7 +37,7 @@ def get_stock_data(stock_name, num_data_points=5):
 
 
 
-def predict_stock_price(symbol):
+def predict_stock_price(symbol,tz=None):
     """
     Predict the stock price for the next 7 days using the SARIMAX model.
 
