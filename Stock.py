@@ -43,8 +43,8 @@ def predict_stock_price(symbol):
     """
 
     # Set the end and start times for data retrieval
-    start = datetime(end.year - 1, end.month, end.day)
-    end = datetime(end.year,end.month,end.day)
+    end = datetime.now()
+    start = end - timedelta(days=365)
 
     # Retrieve stock data for AAPL
     yf.pdr_override()
