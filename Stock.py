@@ -45,7 +45,7 @@ def predict_stock_price(symbol):
     """
 
     # Set the end and start times for data retrieval
-    now = datetime.now()
+    now = datetime.today()
     end = now
     start = end - timedelta(days=365)
 
