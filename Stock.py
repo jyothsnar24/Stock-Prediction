@@ -34,7 +34,7 @@ def get_stock_data(stock_name, num_data_points=5):
 
 def predict_stock_price(symbol):
     import datetime 
-    import date
+    import dateutil
     """
     Predict the stock price for the next 7 days using the SARIMAX model.
 
@@ -46,7 +46,7 @@ def predict_stock_price(symbol):
     """
 
     # Set the end and start times for data retrieval
-    now = date.today()
+    now = dateutil.date.today()
     end = now
     start = end - timedelta(days=365)
 
