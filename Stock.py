@@ -45,7 +45,8 @@ def predict_stock_price(symbol):
     """
 
     # Set the end and start times for data retrieval
-    end = datetime.now()
+    now = datetime.now()
+    end = now
     start = end - timedelta(days=365)
 
     # Retrieve stock data for AAPL
