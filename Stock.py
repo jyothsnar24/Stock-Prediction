@@ -32,18 +32,22 @@ def get_stock_data(stock_name, num_data_points=5):
 
 
 def predict_stock_price(symbol):
-    import pandas as pd
-    from pandas_datareader import data as pdr
-    from datetime import datetime
-    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    """
+    Predict the stock price for the next 7 days using the SARIMAX model.
 
+    Parameters:
+        symbol (str): The stock symbol of the company.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing the predicted stock prices.
+    """
     # Set the end and start times for data retrieval
     end = datetime.now()
     start = datetime(end.year - 1, end.month, end.day)
 
     # Retrieve stock data for AAPL
     yf.pdr_override()
-    df = pdr.get_data_yahoo(symbol, start, end)             #Here we added symbol instead of 'AAPL'
+    df = pdr.get_data_yahoo(symbol, start, end)
 
     # Create a new dataframe with only the 'Close' column
     data = df.filter(['Close'])
@@ -68,14 +72,13 @@ def predict_stock_price(symbol):
 
     # Get the predicted dates for the next 7 days
     last_date = df.index[-1]
-    predicted_dates_sarima = pd.date_range(start=last_date + pd.DateOffset(days=1), periods=7)
+    predicted_dates_sarima = pd.Index(pd.date_range(start=last_date + pd.DateOffset(days=1), periods=7))
 
     # Store the predicted dates and prices for the next 7 days in a dataframe
     predictions_sarimax = pd.DataFrame({'Date': predicted_dates_sarima, 'SARIMAX Predictions': predicted_prices_sarima})
 
     # Print the predicted dates and prices for the next 7 days
     return predictions_sarimax
-
 
 
 
