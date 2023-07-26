@@ -132,9 +132,6 @@ def main():
     st.title("Yahoo Finance Stock Prediction")
     yf.pdr_override()  # Set timezone to 'UTC'
 
-    # Define a caching mechanism to store data for faster prediction
-    yf.cache.precache([stock_name for stock_name in sample_stock_names], period='1mo')
-
     # Same as before...
 
     if stock_data is not None:
