@@ -6,7 +6,34 @@ from datetime import timedelta
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 import streamlit as st
 import pytz  # Import the pytz library to handle timezones
+import pandas_datareader as pdr
 
+
+# def get_stock_data(stock_name, num_data_points=5):
+#     """
+#     Fetch historical stock data from Yahoo Finance.
+
+#     Parameters:
+#         stock_name (str): The stock symbol of the company.
+#         num_data_points (int): The number of data points to fetch.
+
+#     Returns:
+#         pd.DataFrame: A DataFrame containing the historical stock data.
+#     """
+#     try:
+#         # Fetch the historical stock data from Yahoo Finance
+#         stock_data = yf.download(stock_name, period='1mo')
+
+#         # Select the relevant columns and limit the number of data points
+#         stock_data = stock_data.tail(num_data_points)
+#         stock_data = stock_data[['Open', 'High', 'Low', 'Close', 'Volume']]
+#         stock_data.reset_index(inplace=True)
+
+#         return stock_data
+
+#     except Exception as e:
+#         print(f"Error fetching data for {stock_name}: {e}")
+#         return None
 
 def get_stock_data(stock_name, num_data_points=5):
     """
@@ -21,9 +48,9 @@ def get_stock_data(stock_name, num_data_points=5):
     """
     try:
         # Fetch the historical stock data from Yahoo Finance
-        stock_data = yf.download(stock_name, period='1mo')
+        stock_data = pdr.get_data_yahoo(stock_name, period='1mo')
 
-        # Select the relevant columns and limit the number of data points
+        # Limit the number of data points and select relevant columns
         stock_data = stock_data.tail(num_data_points)
         stock_data = stock_data[['Open', 'High', 'Low', 'Close', 'Volume']]
         stock_data.reset_index(inplace=True)
@@ -117,7 +144,7 @@ def predict_stock_price(symbol):
     start = end - timedelta(days=365)
 
     # Retrieve stock data for the specified symbol
-    df = yf.download(symbol, start=start, end=end, auto_adjust=True)
+    df = pdr.get_data_yahoo(symbol, start=start, end=end)
 
     # Create a new dataframe with only the 'Close' column
     data = df.filter(['Close'])
