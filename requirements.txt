@@ -4,3 +4,4 @@ pandas==2.0.3
 streamlit==0.89.0
 yfinance==0.1.75
 statsmodels
+pandas_datareader
