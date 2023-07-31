@@ -5,6 +5,7 @@ import datetime
 from datetime import timedelta
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 import streamlit as st
+import pytz  # Import the pytz library to handle timezones
 
 
 def get_stock_data(stock_name, num_data_points=5):
@@ -91,9 +92,10 @@ def get_stock_data(stock_name, num_data_points=5):
 #     return predictions_sarimax
 
 
-import yfinance as yf
 
-# ... (The get_stock_data function remains unchanged)
+
+
+
 
 def predict_stock_price(symbol):
     """
@@ -147,6 +149,7 @@ def predict_stock_price(symbol):
 
     # Print the predicted dates and prices for the next 7 days
     return predictions_sarimax
+
 
 
 
