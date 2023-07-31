@@ -39,7 +39,7 @@ def get_stock_data(stock_name, num_data_points=5):
 
 def predict_stock_price(symbol):
     """
-    Predict the stock price for the next 7 days using the Prophet library.
+    Predict the stock price for the next 7 days using the SARIMAX model.
 
     Parameters:
         symbol (str): The stock symbol of the company.
@@ -47,34 +47,48 @@ def predict_stock_price(symbol):
     Returns:
         pd.DataFrame: A DataFrame containing the predicted stock prices.
     """
-    predictions_prophet = pd.DataFrame()  # Empty DataFrame to store predictions
+    predictions_sarimax = pd.DataFrame()  # Empty DataFrame to store predictions
+    predicted_dates_sarima = pd.Index([])  # Empty Index to store predicted dates
+    predicted_prices_sarima = np.array([])  # Empty array to store predicted prices
+
+    # Set the end and start times for data retrieval
+    now = datetime.date.today()
+    end = now
+    start = end - timedelta(days=365)
 
     # Retrieve stock data for the specified symbol
-    df = yf.download(symbol, period='1y', group_by='ticker')
+    df = yf.download(symbol, start=start, end=end, group_by='ticker')
 
     # Create a new dataframe with only the 'Close' column
     data = df.filter(['Close'])
 
-    # Rename the columns to fit Prophet's requirements
-    data = data.reset_index().rename(columns={'Date': 'ds', 'Close': 'y'})
+    # Convert the dataframe to a numpy array
+    dataset = data.values
 
-    # Create the Prophet model and fit it to the data
-    model = Prophet(daily_seasonality=True)
-    model.fit(data)
+    # Get the number of rows to train the model on
+    training_data_len = int(np.ceil(len(dataset) * 0.95))
+
+    # Split the data into training and testing sets
+    train_data = dataset[0:training_data_len]
+    test_data = dataset[training_data_len:]
+
+    # Create the SARIMA model and fit it to the training data
+    sarimax_model = SARIMAX(train_data, order=(1, 0, 1), seasonal_order=(1, 1, 0, 12))
+    sarimax_model_fit = sarimax_model.fit()
 
     # Make predictions for the next 7 days
-    future_dates = model.make_future_dataframe(periods=7)
-    predictions = model.predict(future_dates)
+    predictions = sarimax_model_fit.forecast(steps=7)
+    predicted_prices_sarima = predictions
 
-    # Get the predicted dates and prices for the next 7 days
-    predicted_dates = predictions.tail(7)['ds'].dt.date
-    predicted_prices = predictions.tail(7)['yhat']
+    # Get the predicted dates for the next 7 days
+    last_date = df.index[-1]
+    predicted_dates_sarima = pd.Index(pd.date_range(start=last_date + pd.DateOffset(days=1), periods=7))
 
     # Store the predicted dates and prices for the next 7 days in a dataframe
-    predictions_prophet = pd.DataFrame({'Date': predicted_dates, 'Prophet Predictions': predicted_prices})
+    predictions_sarimax = pd.DataFrame({'Date': predicted_dates_sarima, 'SARIMAX Predictions': predicted_prices_sarima})
 
     # Print the predicted dates and prices for the next 7 days
-    return predictions_prophet
+    return predictions_sarimax
 
 
 
