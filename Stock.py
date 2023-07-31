@@ -162,3 +162,4 @@ if __name__ == "__main__":
     # Explicitly set the timezone to 'UTC'
     yf.pdr_override()
     main()
+    
