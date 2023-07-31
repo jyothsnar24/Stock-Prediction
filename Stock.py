@@ -10,6 +10,7 @@ import pandas_datareader as pdr
 from pandas_datareader import data as pdr
 
 
+
 def get_stock_data(stock_name, num_data_points=5):
     """
     Fetch historical stock data from Yahoo Finance.
