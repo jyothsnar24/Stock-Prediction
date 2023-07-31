@@ -5,6 +5,7 @@ import datetime
 from datetime import timedelta
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 import streamlit as st
+from yfinance_financials import YahooFinanceFinancials
 
 def get_stock_data(stock_name, num_data_points=5):
     """
@@ -36,6 +37,60 @@ def get_stock_data(stock_name, num_data_points=5):
 
 
 
+# def predict_stock_price(symbol):
+#     """
+#     Predict the stock price for the next 7 days using the SARIMAX model.
+
+#     Parameters:
+#         symbol (str): The stock symbol of the company.
+
+#     Returns:
+#         pd.DataFrame: A DataFrame containing the predicted stock prices.
+#     """
+#     predictions_sarimax = pd.DataFrame()  # Empty DataFrame to store predictions
+#     predicted_dates_sarima = pd.Index([])  # Empty Index to store predicted dates
+#     predicted_prices_sarima = np.array([])  # Empty array to store predicted prices
+
+#     # Set the end and start times for data retrieval
+#     now = datetime.date.today()
+#     end = now
+#     start = end - timedelta(days=365)
+
+#     # Retrieve stock data for the specified symbol
+#     df = yf.download(symbol, start=start, end=end, group_by='ticker')
+
+#     # Create a new dataframe with only the 'Close' column
+#     data = df.filter(['Close'])
+
+#     # Convert the dataframe to a numpy array
+#     dataset = data.values
+
+#     # Get the number of rows to train the model on
+#     training_data_len = int(np.ceil(len(dataset) * 0.95))
+
+#     # Split the data into training and testing sets
+#     train_data = dataset[0:training_data_len]
+#     test_data = dataset[training_data_len:]
+
+#     # Create the SARIMA model and fit it to the training data
+#     sarimax_model = SARIMAX(train_data, order=(1, 0, 1), seasonal_order=(1, 1, 0, 12))
+#     sarimax_model_fit = sarimax_model.fit()
+
+#     # Make predictions for the next 7 days
+#     predictions = sarimax_model_fit.forecast(steps=7)
+#     predicted_prices_sarima = predictions
+
+#     # Get the predicted dates for the next 7 days
+#     last_date = df.index[-1]
+#     predicted_dates_sarima = pd.Index(pd.date_range(start=last_date + pd.DateOffset(days=1), periods=7))
+
+#     # Store the predicted dates and prices for the next 7 days in a dataframe
+#     predictions_sarimax = pd.DataFrame({'Date': predicted_dates_sarima, 'SARIMAX Predictions': predicted_prices_sarima})
+
+#     # Print the predicted dates and prices for the next 7 days
+#     return predictions_sarimax
+
+
 def predict_stock_price(symbol):
     """
     Predict the stock price for the next 7 days using the SARIMAX model.
@@ -56,10 +111,14 @@ def predict_stock_price(symbol):
     start = end - timedelta(days=365)
 
     # Retrieve stock data for the specified symbol
-    df = yf.download(symbol, start=start, end=end, group_by='ticker')
+    stock_data = YahooFinanceFinancials(symbol).get_historical_price_data(start_date=start, end_date=end, time_interval='daily')
+
+    # Convert the data to a DataFrame
+    df = pd.DataFrame(stock_data[symbol]['prices'])
 
     # Create a new dataframe with only the 'Close' column
-    data = df.filter(['Close'])
+    data = df.filter(['formatted_date', 'close'])
+    data = data.rename(columns={'formatted_date': 'Date', 'close': 'Close'})
 
     # Convert the dataframe to a numpy array
     dataset = data.values
@@ -72,7 +131,7 @@ def predict_stock_price(symbol):
     test_data = dataset[training_data_len:]
 
     # Create the SARIMA model and fit it to the training data
-    sarimax_model = SARIMAX(train_data, order=(1, 0, 1), seasonal_order=(1, 1, 0, 12))
+    sarimax_model = SARIMAX(train_data[:, 1], order=(1, 0, 1), seasonal_order=(1, 1, 0, 12))
     sarimax_model_fit = sarimax_model.fit()
 
     # Make predictions for the next 7 days
@@ -80,7 +139,7 @@ def predict_stock_price(symbol):
     predicted_prices_sarima = predictions
 
     # Get the predicted dates for the next 7 days
-    last_date = df.index[-1]
+    last_date = df['Date'].iloc[-1]
     predicted_dates_sarima = pd.Index(pd.date_range(start=last_date + pd.DateOffset(days=1), periods=7))
 
     # Store the predicted dates and prices for the next 7 days in a dataframe
