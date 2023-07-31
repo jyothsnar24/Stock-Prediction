@@ -5,7 +5,6 @@ import yfinance as yf
 import datetime
 from datetime import timedelta
 from statsmodels.tsa.statespace.sarimax import SARIMAX
-from pandas import Int64Index
 
 
 def get_stock_data(stock_name, num_data_points=5):
@@ -149,17 +148,17 @@ def main():
 
             # Display the predicted data
             if prediction_data is not None:
-                # Format the dates for better display
+                # Use iloc to retrieve the 'Close' column
                 prediction_data['Date'] = prediction_data['Date'].dt.date
+                prediction_prices = prediction_data.iloc[:, 1]  # Extract the 'SARIMAX Predictions' column
                 st.subheader(f"Future Prediction Prices for {stock_name}")
-                st.dataframe(prediction_data)
+                st.dataframe(pd.DataFrame({"Date": prediction_data["Date"], "SARIMAX Predictions": prediction_prices}))
             else:
                 st.warning("No prediction data available.")
     else:
         st.error(f"Error fetching data for {stock_name}. Please try again later.")
 
 if __name__ == "__main__":
-    # Explicitly set the timezone to 'UTC'
     yf.pdr_override()
     main()
     
