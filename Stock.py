@@ -9,32 +9,6 @@ import pytz  # Import the pytz library to handle timezones
 import pandas_datareader as pdr
 
 
-# def get_stock_data(stock_name, num_data_points=5):
-#     """
-#     Fetch historical stock data from Yahoo Finance.
-
-#     Parameters:
-#         stock_name (str): The stock symbol of the company.
-#         num_data_points (int): The number of data points to fetch.
-
-#     Returns:
-#         pd.DataFrame: A DataFrame containing the historical stock data.
-#     """
-#     try:
-#         # Fetch the historical stock data from Yahoo Finance
-#         stock_data = yf.download(stock_name, period='1mo')
-
-#         # Select the relevant columns and limit the number of data points
-#         stock_data = stock_data.tail(num_data_points)
-#         stock_data = stock_data[['Open', 'High', 'Low', 'Close', 'Volume']]
-#         stock_data.reset_index(inplace=True)
-
-#         return stock_data
-
-#     except Exception as e:
-#         print(f"Error fetching data for {stock_name}: {e}")
-#         return None
-
 def get_stock_data(stock_name, num_data_points=5):
     """
     Fetch historical stock data from Yahoo Finance.
@@ -48,9 +22,9 @@ def get_stock_data(stock_name, num_data_points=5):
     """
     try:
         # Fetch the historical stock data from Yahoo Finance
-        stock_data = pdr.get_data_yahoo(stock_name, period='1mo')
+        stock_data = yf.download(stock_name, period='1mo')
 
-        # Limit the number of data points and select relevant columns
+        # Select the relevant columns and limit the number of data points
         stock_data = stock_data.tail(num_data_points)
         stock_data = stock_data[['Open', 'High', 'Low', 'Close', 'Volume']]
         stock_data.reset_index(inplace=True)
@@ -60,6 +34,8 @@ def get_stock_data(stock_name, num_data_points=5):
     except Exception as e:
         print(f"Error fetching data for {stock_name}: {e}")
         return None
+
+
 
 
 
