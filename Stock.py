@@ -7,6 +7,7 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 import streamlit as st
 import pytz  # Import the pytz library to handle timezones
 import pandas_datareader as pdr
+from pandas_datareader import data as pdr
 
 
 def get_stock_data(stock_name, num_data_points=5):
@@ -100,6 +101,8 @@ def get_stock_data(stock_name, num_data_points=5):
 
 
 
+# ... (The get_stock_data function remains unchanged)
+
 def predict_stock_price(symbol):
     """
     Predict the stock price for the next 7 days using the SARIMAX model.
@@ -120,7 +123,7 @@ def predict_stock_price(symbol):
     start = end - timedelta(days=365)
 
     # Retrieve stock data for the specified symbol
-    df = pdr.get_data_yahoo(symbol, start=start, end=end)
+    df = pdr.DataReader(symbol, data_source='yahoo', start=start, end=end)
 
     # Create a new dataframe with only the 'Close' column
     data = df.filter(['Close'])
@@ -152,6 +155,7 @@ def predict_stock_price(symbol):
 
     # Print the predicted dates and prices for the next 7 days
     return predictions_sarimax
+
 
 
 
