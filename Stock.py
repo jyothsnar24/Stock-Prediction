@@ -5,6 +5,7 @@ import yfinance as yf
 import datetime
 from datetime import timedelta
 from statsmodels.tsa.statespace.sarimax import SARIMAX
+from pandas import Int64Index
 
 
 def get_stock_data(stock_name, num_data_points=5):
