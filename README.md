@@ -1,3 +1,6 @@
 # Stock Prediction
 
 [Website](https://stock-prediction-nn3tfijfrz.streamlit.app)
+
+
+In this project, I conducted a rigorous comparative analysis of two widely recognized models, Seasonal Autoregressive Integrated Moving Average (SARIMA),Autoregressive Integrated Moving Average (ARIMA) and Long-Term Memory (LSTM) neural networks, with the aim of forecasting stock prices over a 7-day horizon. The research leveraged historical daily stock prices from diverse economic sectors. SARIMA was employed to capture underlying trends and seasonality in financial time series, while LSTM, a deep learning model, was utilized to capture intricate sequential dependencies. The evaluation of both models employed key performance metrics, including Mean Absolute Error (MAE), Root Mean Square Error (RMSE), and Mean Absolute Percentage Error (MAPE). The results shed light on the strengths and limitations of each model, offering valuable guidance to investors, financial analysts, and decision-makers in stock market forecasting. This study contributes to the existing literature on stock market forecasting and lays the foundation for future advancements and enhancements in financial market forecasting models.
