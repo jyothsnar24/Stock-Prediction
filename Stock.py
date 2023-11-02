@@ -199,7 +199,7 @@ def predict_stock_price(symbol):
 def main():
     st.title("Yahoo Finance Stock Prediction")
 
-    sample_stock_names = ["AAPL", "AMZN", "GOOGL", "MSFT", "FB", "TSLA", "BRK.A", "JPM", "BAC", "C", "XOM", "CVX", "GE", "NFLX", "DIS", "NVDA", "PYPL", "V", "MA", "JNJ", "PFE", "WMT", "KO", "NKE", "ADBE", "CRM", "MCD", "PG", "VZ", "IBM"]
+    sample_stock_names = ["AAPL", "MSFT", "GOOGL","AMZN", "TSLA", "BRK.A", "META", "NVDA", "JPM", "BAC", "WFC", "V", "UNH", "JNJ", "MCD", "VZ", "PG", "COST", "KO", "HD", "MA", "VRTX", "WMT", "CRM", "INTC", "PEP", "TMO", "MRK", "ABBV", "MS", "ADBE", "LMT", "UNP", "CAT", "TXN", "CVX", "XOM", "DHR", "RTX", "IBM", "DOW", "NEE", "BA", "PFE", "HON", "CSCO", "LIN", "COSTCO", "MMM", "MDLZ", "TJX", "TGT", "NKE", "UPS", "TEL", "AVGO", "LLY", "CMG", "CI", "ORCL", "CHTR", "LOW", "ABT", "DHR", "DXCM", "ADP", "FISV", "NSC", "WM", "BK", "AEP", "EQT", "LHX", "ESRT", "WELL", "BKNG", "TPR", "EXPD", "IQV", "TDY", "DHR", "WBA", "LUMN", "DIS", "WM", "EFX", "KHC", "KLAC", "TROW", "MTCH", "SYK", "STZ", "ABMD", "DHR", "WDAY", "INTC", "WBA", "TRV", "DHR", "TJX", "XEL", "BBY", "TFC", "KLAC", "MS", "SBUX", "SYY", "DHR", "TJX", "XEL", "BBY", "TFC", "KLAC", "MS", "SBUX", "SYY"]
 
     stock_name = st.selectbox("Select a Stock", sample_stock_names)
 
