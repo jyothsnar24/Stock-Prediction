@@ -185,7 +185,7 @@ import datetime
 from datetime import timedelta
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 import streamlit as st
-import pytz 
+
 import pandas_datareader as pdr
 from pandas_datareader import data as pdr
 
