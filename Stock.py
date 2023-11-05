@@ -178,7 +178,7 @@ def get_stock_data(stock_name, num_data_points=5):
         st.error(f"Error fetching data for {stock_name}: {e}")
         return None
 
-def predict_stock_price(symbol):
+def predict_stock_price(stock_name):
     try:
         predictions_sarimax = pd.DataFrame()
         predicted_dates_sarima = pd.Index([])
@@ -188,7 +188,7 @@ def predict_stock_price(symbol):
         end = now
         start = end - timedelta(days=365)
 
-        df = pdr.DataReader(symbol, data_source='yahoo', start=start, end=end)
+        df = pdr.DataReader(stock_name, data_source='yahoo', start=start, end=end)
         data = df.filter(['Close'])
         dataset = data.values
         training_data_len = int(np.ceil(len(dataset) * 0.95))
@@ -216,7 +216,7 @@ def predict_stock_price(symbol):
         return predictions_sarimax
 
     except Exception as e:
-        st.error(f"Error predicting stock price: {e}")
+        st.error(f"Error predicting stock price for {stock_name}: {e}")
         return None
 
 def main():
