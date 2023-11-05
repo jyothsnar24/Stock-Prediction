@@ -6,3 +6,4 @@ yfinance
 statsmodels
 pandas_datareader
 pytz
+altair==5.0.1
