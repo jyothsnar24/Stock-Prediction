@@ -2,7 +2,7 @@ click==7.1.2
 numpy==1.25.2
 pandas==2.0.3
 streamlit==0.89.0
-yfinance==0.1.75
+yfinance
 statsmodels
 pandas_datareader
 pytz
