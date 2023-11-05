@@ -184,9 +184,6 @@ def predict_stock_price(symbol):
         predicted_dates_sarima = pd.Index([])
         predicted_prices_sarima = np.array([])
 
-        if not isinstance(symbol, str):
-            raise ValueError("The 'symbol' must be a string representing the stock symbol.")
-
         now = datetime.now()
         end = now
         start = end - timedelta(days=365)
@@ -219,7 +216,7 @@ def predict_stock_price(symbol):
         return predictions_sarimax
 
     except Exception as e:
-        st.error(f"Error predicting stock price for {symbol}: {e}")
+        st.error(f"Error predicting stock price: {e}")
         return None
 
 def main():
