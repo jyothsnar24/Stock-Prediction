@@ -157,17 +157,15 @@
 
 
 
-import pandas_datareader as pdr
-from datetime import datetime, timedelta
 import yfinance as yf
 import streamlit as st
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.statespace.sarimax import SARIMAX
+from datetime import datetime, timedelta
 
 def get_stock_data(stock_name, num_data_points=5):
     try:
-        # Fetch historical stock data from Yahoo Finance
         stock_data = yf.download(stock_name, period='1mo')
         stock_data = stock_data.tail(num_data_points)
         stock_data = stock_data[['Open', 'High', 'Low', 'Close', 'Volume']]
@@ -188,24 +186,13 @@ def predict_stock_price(stock_name):
         end = now
         start = end - timedelta(days=365)
 
-        # Attempt to retrieve data, and add debugging statements
-        try:
-            df = pdr.DataReader(stock_name, data_source='yahoo', start=start, end=end)
-        except Exception as e:
-            st.error(f"Error retrieving data for {stock_name}: {e}")
-            return None
+        df = yf.download(stock_name, start=start, end=end)
+        data = df['Close'].to_frame()
 
-        data = df.filter(['Close'])
-        dataset = data.values
-        training_data_len = int(np.ceil(len(dataset) * 0.95))
-        train_data = dataset[0:training_data_len]
-        test_data = dataset[training_data_len:]
-
-        # Use a try-except block to handle potential convergence issues
+        # Perform predictions and handle exceptions
         try:
-            # Create the SARIMAX model and fit it to the training data
-            sarimax_model = SARIMAX(train_data, order=(1, 0, 1), seasonal_order=(1, 1, 0, 12))
-            sarimax_model_fit = sarimax_model.fit()
+            sarimax_model = SARIMAX(data, order=(1, 0, 1), seasonal_order=(1, 1, 0, 12))
+            sarimax_model_fit = sarimax_model.fit(disp=False)
 
             # Make predictions for the next 7 days
             predictions = sarimax_model_fit.forecast(steps=7)
@@ -216,7 +203,7 @@ def predict_stock_price(stock_name):
             return None
 
         last_date = df.index[-1]
-        predicted_dates_sarima = pd.Index(pd.date_range(start=last_date + pd.DateOffset(days=1), periods=7))
+        predicted_dates_sarima = pd.date_range(start=last_date + timedelta(days=1), periods=7)
         predictions_sarimax = pd.DataFrame({'Date': predicted_dates_sarima, 'SARIMAX Predictions': predicted_prices_sarima})
 
         return predictions_sarimax
@@ -241,15 +228,12 @@ def main():
                 prediction_data = predict_stock_price(stock_name)
 
             if prediction_data is not None:
-                prediction_data['Date'] = prediction_data['Date'].dt.date
-                prediction_prices = prediction_data.iloc[:, 1]
                 st.subheader(f"Future Prediction Prices for {stock_name}")
-                st.dataframe(pd.DataFrame({"Date": prediction_data["Date"], "SARIMAX Predictions": prediction_prices}))
+                st.dataframe(prediction_data)
             else:
                 st.warning("No prediction data available. Check the model parameters or try again later.")
     else:
         st.error(f"Error fetching data for {stock_name}. Please try again later.")
 
 if __name__ == "__main__":
-    yf.pdr_override()
     main()
