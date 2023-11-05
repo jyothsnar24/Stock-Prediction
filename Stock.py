@@ -188,7 +188,13 @@ def predict_stock_price(stock_name):
         end = now
         start = end - timedelta(days=365)
 
-        df = pdr.DataReader(stock_name, data_source='yahoo', start=start, end=end)
+        # Attempt to retrieve data, and add debugging statements
+        try:
+            df = pdr.DataReader(stock_name, data_source='yahoo', start=start, end=end)
+        except Exception as e:
+            st.error(f"Error retrieving data for {stock_name}: {e}")
+            return None
+
         data = df.filter(['Close'])
         dataset = data.values
         training_data_len = int(np.ceil(len(dataset) * 0.95))
