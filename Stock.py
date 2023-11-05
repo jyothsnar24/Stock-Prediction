@@ -190,11 +190,9 @@ def predict_stock_price(symbol):
         end = now
         start = end - timedelta(days=365)
 
-        # Use a try-except block to handle the timezone error
         try:
             df = pdr.DataReader(symbol, data_source='yahoo', start=start, end=end)
         except KeyError:
-            # If 'exchangeTimezoneName' is not available, set the timezone to UTC
             df = pdr.DataReader(symbol, data_source='yahoo', start=start, end=end)
             df.index = df.index.tz_localize('UTC')
         
@@ -235,18 +233,20 @@ def main():
                 prediction_data = predict_stock_price(stock_name)
 
             if prediction_data is not None:
-                prediction_data['Date'] = prediction_data['Date'].dt.date
-                prediction_prices = prediction_data.iloc[:, 1]
-                st.subheader(f"Future Prediction Prices for {stock_name}")
+                if not prediction_data.empty:
+                    prediction_data['Date'] = prediction_data['Date'].dt.date
+                    prediction_prices = prediction_data.iloc[:, 1]
+                    st.subheader(f"Future Prediction Prices for {stock_name}")
 
-                # Create an Altair chart to visualize the data
-                chart = alt.Chart(prediction_data).mark_line().encode(
-                    x='Date:T',
-                    y='SARIMAX Predictions:Q'
-                ).interactive()
-                
-                st.altair_chart(chart, use_container_width=True)
+                    # Create an Altair chart to visualize the data
+                    chart = alt.Chart(prediction_data).mark_line().encode(
+                        x='Date:T',
+                        y='SARIMAX Predictions:Q'
+                    ).interactive()
 
+                    st.altair_chart(chart, use_container_width=True)
+                else:
+                    st.warning("No prediction data available for the selected stock.")
             else:
                 st.warning("No prediction data available. Check the model parameters or try again later.")
     else:
