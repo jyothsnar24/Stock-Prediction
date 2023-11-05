@@ -167,6 +167,7 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 def get_stock_data(stock_name, num_data_points=5):
     try:
+        # Fetch historical stock data from Yahoo Finance
         stock_data = yf.download(stock_name, period='1mo')
         stock_data = stock_data.tail(num_data_points)
         stock_data = stock_data[['Open', 'High', 'Low', 'Close', 'Volume']]
@@ -194,11 +195,20 @@ def predict_stock_price(symbol):
         train_data = dataset[0:training_data_len]
         test_data = dataset[training_data_len:]
 
-        sarimax_model = SARIMAX(train_data, order=(1, 0, 1), seasonal_order=(1, 1, 0, 12))
-        sarimax_model_fit = sarimax_model.fit()
-        
-        predictions = sarimax_model_fit.forecast(steps=7)
-        predicted_prices_sarima = predictions
+        # Use a try-except block to handle potential convergence issues
+        try:
+            # Create the SARIMAX model and fit it to the training data
+            sarimax_model = SARIMAX(train_data, order=(1, 0, 1), seasonal_order=(1, 1, 0, 12))
+            sarimax_model_fit = sarimax_model.fit()
+
+            # Make predictions for the next 7 days
+            predictions = sarimax_model_fit.forecast(steps=7)
+            predicted_prices_sarima = predictions
+
+        except Exception as e:
+            st.warning("SARIMAX model convergence issue. Trying with different model parameters.")
+            return None
+
         last_date = df.index[-1]
         predicted_dates_sarima = pd.Index(pd.date_range(start=last_date + pd.DateOffset(days=1), periods=7))
         predictions_sarimax = pd.DataFrame({'Date': predicted_dates_sarima, 'SARIMAX Predictions': predicted_prices_sarima})
@@ -230,11 +240,10 @@ def main():
                 st.subheader(f"Future Prediction Prices for {stock_name}")
                 st.dataframe(pd.DataFrame({"Date": prediction_data["Date"], "SARIMAX Predictions": prediction_prices}))
             else:
-                st.warning("No prediction data available.")
+                st.warning("No prediction data available. Check the model parameters or try again later.")
     else:
         st.error(f"Error fetching data for {stock_name}. Please try again later.")
 
 if __name__ == "__main__":
     yf.pdr_override()
     main()
-
