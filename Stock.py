@@ -166,8 +166,7 @@ from datetime import datetime, timedelta
 
 def get_stock_data(stock_name, num_data_points=5):
     try:
-        # Fetch historical stock data from Yahoo Finance with a default timezone (New York)
-        stock_data = yf.download(stock_name, period='1mo', group_by='ticker')
+        stock_data = yf.download(stock_name, period='1mo')
         stock_data = stock_data.tail(num_data_points)
         stock_data = stock_data[['Open', 'High', 'Low', 'Close', 'Volume']]
         stock_data.reset_index(inplace=True)
@@ -179,6 +178,10 @@ def get_stock_data(stock_name, num_data_points=5):
 
 def predict_stock_price(stock_name):
     try:
+        if stock_name in ["GOOGL", "MSFT", "TSLA"]:
+            st.warning(f"Data retrieval and prediction for {stock_name} may not be accurate due to known issues.")
+            return None
+
         predictions_sarimax = pd.DataFrame()
         predicted_dates_sarima = pd.Index([])
         predicted_prices_sarima = np.array([])
@@ -187,8 +190,7 @@ def predict_stock_price(stock_name):
         end = now
         start = end - timedelta(days=365)
 
-        # Fetch data without specifying a specific timezone
-        df = yf.download(stock_name, start=start, end=end, group_by='ticker')
+        df = yf.download(stock_name, start=start, end=end)
         data = df['Close'].to_frame()
 
         # Perform predictions and handle exceptions
