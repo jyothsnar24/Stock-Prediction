@@ -180,10 +180,12 @@ def get_stock_data(stock_name, num_data_points=5):
 
 def predict_stock_price(symbol):
     try:
-        print(f"Debug: symbol type = {type(symbol)}, symbol value = {symbol}")
         predictions_sarimax = pd.DataFrame()
         predicted_dates_sarima = pd.Index([])
         predicted_prices_sarima = np.array([])
+
+        if not isinstance(symbol, str):
+            raise ValueError("The 'symbol' must be a string representing the stock symbol.")
 
         now = datetime.now()
         end = now
